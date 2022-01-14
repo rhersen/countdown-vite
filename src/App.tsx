@@ -25,8 +25,8 @@ class App extends Component {
 
   async componentDidMount() {
     intervalId = setInterval(() => this.setState({ now: new Date() }), 990);
-    // const response = await fetch("/.netlify/functions/locations");
-    // this.setState({ locations: await response.json() });
+    const response = await fetch("/.netlify/functions/locations");
+    this.setState({ locations: await response.json() });
   }
 
   componentWillUnmount() {
@@ -127,7 +127,7 @@ class App extends Component {
             });
         }}
       >
-        {location}
+        {this.state.locations[location]}
       </button>
     );
   }
