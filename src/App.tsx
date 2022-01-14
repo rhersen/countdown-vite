@@ -4,6 +4,7 @@ import "./App.css";
 import { add, formatISO, sub } from "date-fns";
 import TrainAnnouncement from "./TrainAnnouncement";
 import Table from "./Table";
+import { SearchParams } from "./SearchParams";
 
 let intervalId: NodeJS.Timeout;
 
