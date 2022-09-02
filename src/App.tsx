@@ -12,6 +12,7 @@ type MyState = {
   announcements: TrainAnnouncement[];
   msg: string;
   now: Date;
+  eventSource?: EventSource;
 };
 
 class App extends Component {
@@ -68,6 +69,34 @@ class App extends Component {
               )}&since=${since}&until=${until}`
             );
             const json = await rsp.json();
+            console.log(json.INFO);
+            if (json.INFO) {
+              this.state.eventSource?.close();
+              const eventSource = new EventSource(json.INFO.SSEURL);
+              eventSource.onmessage = (event: MessageEvent) => {
+                const { data } = event;
+                const trainAnnouncement: TrainAnnouncement[] =
+                  JSON.parse(data).RESPONSE.RESULT[0].TrainAnnouncement;
+                console.log(
+                  trainAnnouncement.map(
+                    ({
+                      ActivityType,
+                      AdvertisedTimeAtLocation,
+                      AdvertisedTrainIdent,
+                      LocationSignature,
+                      TimeAtLocationWithSeconds,
+                    }) => ({
+                      ActivityType,
+                      AdvertisedTimeAtLocation,
+                      AdvertisedTrainIdent,
+                      LocationSignature,
+                      TimeAtLocationWithSeconds,
+                    })
+                  )
+                );
+              };
+              this.setState({ eventSource });
+            }
             if (json.msg) this.setState({ msg: json.msg });
             this.setAnnouncements(json.TrainAnnouncement);
           }}
