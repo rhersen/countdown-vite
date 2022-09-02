@@ -1,9 +1,9 @@
-import Response from "./Response";
+import TrainAnnouncement from "./TrainAnnouncement";
 import { SearchParams } from "./SearchParams";
 
 export type TableProps = {
   locations: { [key: string]: string };
-  response: Response;
+  announcements: TrainAnnouncement[];
   now: Date;
   fetch: (params: SearchParams) => void;
 };

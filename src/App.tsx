@@ -1,5 +1,4 @@
 import { Component } from "react";
-import Response from "./Response";
 import "./App.css";
 import { add, formatISO, sub } from "date-fns";
 import TrainAnnouncement from "./TrainAnnouncement";
@@ -10,7 +9,7 @@ let intervalId: NodeJS.Timeout;
 
 type MyState = {
   locations: { [key: string]: string };
-  response: Response;
+  announcements: TrainAnnouncement[];
   msg: string;
   now: Date;
 };
@@ -18,7 +17,7 @@ type MyState = {
 class App extends Component {
   state: MyState = {
     locations: {},
-    response: { announcements: [] },
+    announcements: [],
     msg: "",
     now: new Date(),
   };
@@ -42,7 +41,7 @@ class App extends Component {
 
     const since = formatISO(sub(new Date(), { hours: 2 })).substring(0, 19);
     const until = formatISO(add(new Date(), { hours: 2 })).substring(0, 19);
-    const { msg, response, now, locations } = this.state;
+    const { msg, announcements, now, locations } = this.state;
 
     return (
       <div>
@@ -60,7 +59,7 @@ class App extends Component {
         <div>{msg}</div>
         <Table
           locations={locations}
-          response={response}
+          announcements={announcements}
           now={now}
           fetch={async (params: SearchParams) => {
             const rsp = await fetch(
@@ -78,11 +77,7 @@ class App extends Component {
   }
 
   private setAnnouncements(announcements: Array<TrainAnnouncement>) {
-    if (announcements)
-      this.setState({
-        response: { announcements },
-        msg: "",
-      });
+    if (announcements) this.setState({ announcements, msg: "" });
   }
 
   button(location: string) {
@@ -96,7 +91,7 @@ class App extends Component {
           if (json.msg) this.setState({ msg: json.msg });
           if (json.TrainAnnouncement)
             this.setState({
-              response: { announcements: json.TrainAnnouncement },
+              announcements: json.TrainAnnouncement,
               msg: "",
             });
         }}

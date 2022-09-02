@@ -1,9 +1,5 @@
 import TrainAnnouncement from "./TrainAnnouncement";
 
-export default interface Response {
-  announcements: Array<TrainAnnouncement>;
-}
-
 export function stationCount(announcements: TrainAnnouncement[]): number {
   if (!announcements) return 0;
 

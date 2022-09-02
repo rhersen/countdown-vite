@@ -4,8 +4,8 @@ import { TableProps } from "./TableProps";
 import TrainRow from "./TrainRow";
 
 export default function TrainTable(props: TableProps) {
-  const { response, locations, now, fetch } = props;
-  const t = train(response.announcements);
+  const { announcements, locations, now, fetch } = props;
+  const t = train(announcements);
   return (
     <table>
       {t ? (
@@ -15,7 +15,7 @@ export default function TrainTable(props: TableProps) {
         </caption>
       ) : null}
       <tbody>
-        {response.announcements.map((announcement) => {
+        {announcements.map((announcement) => {
           const location = announcement.LocationSignature;
           return (
             <TrainRow
