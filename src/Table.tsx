@@ -5,7 +5,7 @@ import StationTable from "./StationTable";
 import TrainTable from "./TrainTable";
 
 export default function Table(props: TableProps) {
-  const count = stationCount(props.response);
+  const count = stationCount(props.response.announcements);
   return count === 1 ? (
     <StationTable {...props} />
   ) : count > 1 ? (

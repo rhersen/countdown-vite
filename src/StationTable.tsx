@@ -7,7 +7,9 @@ import React from "react";
 export default function StationTable(props: TableProps) {
   return (
     <table>
-      <caption>{stationName(props.response, props.locations)}</caption>
+      <caption>
+        {stationName(props.response.announcements, props.locations)}
+      </caption>
       <tbody>
         {props.response.announcements.map((announcement: TrainAnnouncement) => {
           const trainId = announcement.AdvertisedTrainIdent;

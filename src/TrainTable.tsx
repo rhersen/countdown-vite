@@ -5,17 +5,17 @@ import TrainRow from "./TrainRow";
 
 export default function TrainTable(props: TableProps) {
   const { response, locations, now, fetch } = props;
-  const t = train(response);
+  const t = train(response.announcements);
   return (
     <table>
       {t ? (
         <caption>
           {t.TypeOfTraffic.Description} {t.AdvertisedTrainIdent} till{" "}
-          {t.ToLocation.map(l => locations[l.LocationName]).join()}
+          {t.ToLocation.map((l) => locations[l.LocationName]).join()}
         </caption>
       ) : null}
       <tbody>
-        {response.announcements.map(announcement => {
+        {response.announcements.map((announcement) => {
           const location = announcement.LocationSignature;
           return (
             <TrainRow
