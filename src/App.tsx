@@ -69,31 +69,30 @@ class App extends Component {
               )}&since=${since}&until=${until}`
             );
             const json = await rsp.json();
-            console.log(json.INFO);
+
             if (json.INFO) {
               this.state.eventSource?.close();
               const eventSource = new EventSource(json.INFO.SSEURL);
-              eventSource.onmessage = (event: MessageEvent) => {
-                const { data } = event;
+              const self = this;
+              eventSource.onmessage = ({ data }: MessageEvent) => {
                 const trainAnnouncement: TrainAnnouncement[] =
                   JSON.parse(data).RESPONSE.RESULT[0].TrainAnnouncement;
-                console.log(
-                  trainAnnouncement.map(
-                    ({
-                      ActivityType,
-                      AdvertisedTimeAtLocation,
-                      AdvertisedTrainIdent,
-                      LocationSignature,
-                      TimeAtLocationWithSeconds,
-                    }) => ({
-                      ActivityType,
-                      AdvertisedTimeAtLocation,
-                      AdvertisedTrainIdent,
-                      LocationSignature,
-                      TimeAtLocationWithSeconds,
-                    })
-                  )
-                );
+                self.setState(({ announcements }: MyState) => {
+                  const found = announcements.findIndex(
+                    (announcement) =>
+                      announcement.LocationSignature ===
+                      trainAnnouncement[0].LocationSignature
+                  );
+                  if (found < 0) return;
+                  return {
+                    announcements: announcements
+                      .slice(0, found)
+                      .concat(
+                        trainAnnouncement,
+                        announcements.slice(found + 1)
+                      ),
+                  };
+                });
               };
               this.setState({ eventSource });
             }
