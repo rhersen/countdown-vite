@@ -34,36 +34,14 @@ class App extends Component {
   }
 
   render() {
-    const stateUpdater =
-      (newAnnouncement: TrainAnnouncement) => (oldState: MyState) => {
-        const { announcements } = oldState.response;
-        const found = announcements.findIndex(
-          (oldAnnouncement: TrainAnnouncement) =>
-            oldAnnouncement.LocationSignature ===
-            newAnnouncement.LocationSignature
-        );
-        return {
-          response: {
-            announcements:
-              found === -1
-                ? announcements
-                : [
-                    ...announcements.slice(0, found),
-                    newAnnouncement,
-                    ...announcements.slice(found + 1),
-                  ],
-          },
-        };
-      };
-
     function queryString(params: SearchParams) {
       return params.location
         ? `?location=${params.location}`
         : `?train=${params.trainId}`;
     }
 
-    const since = formatISO(sub(new Date(), { hours: 2 })).substr(0, 19);
-    const until = formatISO(add(new Date(), { hours: 2 })).substr(0, 19);
+    const since = formatISO(sub(new Date(), { hours: 2 })).substring(0, 19);
+    const until = formatISO(add(new Date(), { hours: 2 })).substring(0, 19);
     const { msg, response, now, locations } = this.state;
 
     return (
@@ -93,10 +71,6 @@ class App extends Component {
             const json = await rsp.json();
             if (json.msg) this.setState({ msg: json.msg });
             this.setAnnouncements(json.TrainAnnouncement);
-
-            function getAnnouncements(data: string): TrainAnnouncement {
-              return JSON.parse(data).RESPONSE.RESULT[0].TrainAnnouncement[0];
-            }
           }}
         />
       </div>
