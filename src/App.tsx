@@ -46,13 +46,13 @@ class App extends Component {
 
     return (
       <div>
+        {this.button("Mr")}
         {this.button("Sub")}
         {this.button("Sod")}
         {this.button("Sci")}
         {this.button("Sst")}
         {this.button("Åbe")}
         {this.button("Äs")}
-        {this.button("Sta")}
         {this.button("Hu")}
         {this.button("Flb")}
         {this.button("Tul")}
