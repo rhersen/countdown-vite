@@ -47,6 +47,7 @@ class App extends Component {
     return (
       <div>
         {this.button("Mr")}
+        {this.button("So")}
         {this.button("Sub")}
         {this.button("Sod")}
         {this.button("Sci")}
